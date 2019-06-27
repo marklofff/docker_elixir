@@ -1,9 +1,10 @@
 defmodule Docker.Container do
-  alias Docker.Client
-  alias Docker.Client.Response
   @moduledoc """
     This is the Container module for all interactions with Docker containers.
   """
+
+  alias Docker.Client
+  alias Docker.Client.Response
 
   def all(host, opts \\ %{}) do
     "#{host}/containers/json"
@@ -182,6 +183,4 @@ defmodule Docker.Container do
         stream_response(output)
     end
   end
-
 end
-
