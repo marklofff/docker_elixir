@@ -7,7 +7,7 @@ defmodule Docker.Client do
   def send_request(url, method, body \\ "", headers \\ [], opts \\ []) do
     json_body = Jason.encode!(body)
     json_headers = headers ++ [{"Content-Type", "application/json"}]
-    merged_opts = opts ++ default_options
+    merged_opts = opts ++ default_options()
     request!(method, url, json_body, json_headers, merged_opts)
   end
 

@@ -50,7 +50,7 @@ defmodule Docker.Container do
       {:ok, %{id: id}} ->
         case start(host, id) do
           {:ok, _} -> {:ok, %{id: id}}
-          {:error, reason} -> {:error, :reason}
+          {:error, reason} -> {:error, reason}
         end
       {:error, reason} -> {:error, reason}
     end
@@ -95,7 +95,7 @@ defmodule Docker.Container do
 
   def exec_start(host, exec_id, opts) do
     "#{host}/exec/#{exec_id}/start"
-    |> Client.send_request(:post, opts, [], [stream_to: self])
+    |> Client.send_request(:post, opts, [], [stream_to: self()])
     |> Response.parse(:exec_start)
   end
 
@@ -111,7 +111,7 @@ defmodule Docker.Container do
     case exec_create(host, container_id, create_opts) do
       {:ok, %{id: exec_id}} ->
         case exec_start(host, exec_id, %{}) do
-          {:ok, _} -> stream_response
+          {:ok, _} -> stream_response()
           {:error, reason} -> {:error, reason}
         end
       {:error, reason} -> {:error, reason}
@@ -130,11 +130,11 @@ defmodule Docker.Container do
   def logs_stream(host, container_id, opts  \\ %{}) do
     "#{host}/containers/#{container_id}/logs"
     |> Client.add_query_params(opts)
-    |> Client.send_request(:get, [], [stream_to: self])
+    |> Client.send_request(:get, [], [stream_to: self()])
     |> parse_logs_stream_response
   end
 
-  defp parse_logs_stream_response(%HTTPoison.AsyncResponse{id: _ref}), do: stream_response
+  defp parse_logs_stream_response(%HTTPoison.AsyncResponse{id: _ref}), do: stream_response()
 
   @default_attach_params %{
     stream: 1,
