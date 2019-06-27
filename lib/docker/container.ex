@@ -26,16 +26,16 @@ defmodule Docker.Container do
       "AttachStdin"  => true,
       "AttachStdout" => true,
       "AttachStderr" => true,
-      "Cmd"          => ["bash"],
+      "Cmd"          => ["sh"],
       "HostConfig" => %{
         "CapDrop": ["ALL"]
       }
   }
 
   # refer to https://docs.docker.com/engine/reference/api/docker_remote_api_v1.24/#/create-a-container
-  def create(host, opts) do
+  def create(host, opts, params \\ []) do
     "#{host}/containers/create"
-    |> Client.send_request(:post, Map.merge(@default_creation_params, opts))
+    |> Client.send_request(:post, Map.merge(@default_creation_params, opts), [], [params: params])
     |> Response.parse(:create)
   end
 
@@ -45,8 +45,8 @@ defmodule Docker.Container do
     |> Response.parse(:start)
   end
 
-  def run(host, opts) do
-    case create(host, opts) do
+  def run(host, opts, params) do
+    case create(host, opts, params) do
       {:ok, %{id: id}} ->
         case start(host, id) do
           {:ok, _} -> {:ok, %{id: id}}

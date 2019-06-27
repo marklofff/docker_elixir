@@ -5,14 +5,14 @@ defmodule Docker.Client do
   use HTTPoison.Base
 
   def send_request(url, method, body \\ "", headers \\ [], opts \\ []) do
-    json_body = Poison.encode!(body)
+    json_body = Jason.encode!(body)
     json_headers = headers ++ [{"Content-Type", "application/json"}]
     merged_opts = opts ++ default_options
     request!(method, url, json_body, json_headers, merged_opts)
   end
 
   def process_response_body(body) do
-    case Poison.decode(body) do
+    case Jason.decode(body) do
       {:ok, json} -> json
       _ -> body
     end

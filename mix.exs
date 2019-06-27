@@ -8,7 +8,7 @@ defmodule Docker.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      description: "Api wrapper for Docker API in Elixir",
-     package: package,
+     package: package(),
      deps: deps()]
   end
 
@@ -37,9 +37,9 @@ defmodule Docker.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:poison, "~> 2.0"},
-      {:credo, "~> 0.5"},
-      {:httpoison, "~> 0.13"}
+      {:jason, "~> 1.1"},
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:httpoison, "~> 1.4"}
     ]
   end
 end
