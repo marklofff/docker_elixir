@@ -38,7 +38,7 @@ defmodule Docker.Mixfile do
   defp deps do
     [
       {:jason, "~> 1.1"},
-      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.0.0", runtime: false},
       {:httpoison, "~> 1.4"}
     ]
   end
